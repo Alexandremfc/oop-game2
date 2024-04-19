@@ -1,10 +1,11 @@
 class Player {
     constructor () {
-        this.gamePaused = false;
-        this.positionX = 50;
-        this.positionY = 0;
         this.width = 10;
         this.height = 10;
+        this.gamePaused = false;
+        this.positionX = 50 - (this.width / 2);
+        this.positionY = 0;
+        
         this.color = "red";
 
         this.playerElm = document.getElementById("player");
