@@ -16,12 +16,14 @@ class Player {
 
     moveLeft () {
         if (this.gamePaused) return;
+        if (this.positionX <= 0) return;
         this.positionX--;
         this.playerElm.style.left = this.positionX + "vw";
     }
 
     moveRight () {
         if (this.gamePaused) return;
+        if (this.positionX >= 100 - this.width) return;
         this.positionX++;
         this.playerElm.style.left = this.positionX + "vw";
         //always .left cause we located on bottom left to begin
