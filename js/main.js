@@ -1,5 +1,6 @@
 class Player {
     constructor () {
+        this.gamePaused = false;
         this.positionX = 50;
         this.positionY = 0;
         this.width = 10;
@@ -14,14 +15,20 @@ class Player {
     }
 
     moveLeft () {
+        if (this.gamePaused) return;
         this.positionX--;
         this.playerElm.style.left = this.positionX + "vw";
     }
 
     moveRight () {
+        if (this.gamePaused) return;
         this.positionX++;
         this.playerElm.style.left = this.positionX + "vw";
         //always .left cause we located on bottom left to begin
+    }
+
+    togglePause() {
+        this.gamePaused = !this.gamePaused;
     }
 }
 
@@ -80,6 +87,26 @@ const player = new Player();
 
 const obstaclesArr = [];
 
+function gameLoop () {
+
+    obstaclesArr.forEach( (obstacleInstance) => {
+       
+        // move obstacle
+         obstacleInstance.moveDown()
+ 
+         // detect collision
+         if (
+             player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
+             player.positionX + player.width > obstacleInstance.positionX &&
+             player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
+             player.positionY + player.height > obstacleInstance.positionY
+         ) {
+             // collision detected
+             console.log("sad");
+         }
+    });
+}
+
 setInterval(() => {
 
     const newObstacle = new Obstacle(obstaclesArr.length);
@@ -89,29 +116,27 @@ setInterval(() => {
 
 setInterval(() => {
 
-    obstaclesArr.forEach( (obstacleInstance) => {
-        obstacleInstance.moveDown()
-    });
+    if (!player.gamePaused) {
+        gameLoop();
+    }
 
 }, 300);
 
-const ARROW_LEFT = "ArrowLeft";
-const ARROW_RIGHT = "ArrowRight";
+const KEYS = {
+    ARROW_LEFT: "ArrowLeft",
+    ARROW_RIGHT: "ArrowRight",
+    ESCAPE: "Escape"
+}
 
 document.addEventListener("keydown", (e) => {
-    if (e.code === ARROW_LEFT) {
+    if (e.code === KEYS.ARROW_LEFT) {
         player.moveLeft();
-    } else if (e.code === ARROW_RIGHT) {
+    } else if (e.code === KEYS.ARROW_RIGHT) {
         player.moveRight();
+    } else if (e.code === KEYS.ESCAPE) {
+        player.togglePause();
     }
 });
-
-
-
-
-
-
-
 
 const CSS_COLOR_NAMES = {
     AliceBlue: '#F0F8FF',
